@@ -7,9 +7,9 @@ export async function usernameValidate(values) {
 }
 
 /** validate password */
-export async function passwordValidate(values){
-    const errors =  passwordVerify({}, values);
-    return errors;
+export async function passwordValidate(values) {
+  const errors = passwordVerify({}, values);
+  return errors;
 }
 
 /** verify password */
@@ -27,6 +27,17 @@ function passwordVerify(errors = {}, values) {
   } else if (!specialChars.test(values.password)) {
     errors.password = toast.error("Password must have special characters");
   }
+  return errors;
+}
+
+/** validate reset password */
+export async function resetPasswordValidation(values) {
+  const errors = passwordVerify({}, values);
+
+  if (values.password !== values.confirm_password) {
+    errors.exist = toast.error("Password not match");
+  }
+
   return errors;
 }
 
