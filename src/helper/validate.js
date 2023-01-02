@@ -14,6 +14,7 @@ export async function passwordValidate(values) {
 
 /** verify password */
 function passwordVerify(errors = {}, values) {
+  // eslint-disable-next-line
   const specialChars = /[`!@#$%^&*()_+-=\[\]{}; ':"\\|,.<>\/?~]/;
 
   if (!values.password) {
@@ -41,6 +42,20 @@ export async function resetPasswordValidation(values) {
   return errors;
 }
 
+/** validate register form */
+export async function registerValidation(values) {
+  const errors = usernameVarify({}, values);
+  passwordVerify(errors, values);
+  emailVerify(errors, values);
+  return errors;
+}
+
+/** validate profile page */
+export async function profileValidation(values) {
+  const errors = emailVerify({}, values);
+  return errors
+}
+
 /** validate username */
 function usernameVarify(error = {}, values) {
   if (!values.username) {
@@ -48,5 +63,19 @@ function usernameVarify(error = {}, values) {
   } else if (values.username.includes(" ")) {
     error.username = toast.error("Invalid Username");
   }
+  return error;
+}
+
+/** validate email */
+function emailVerify(error = {}, values) {
+  if (!values.email) {
+    error.email = toast.error("Email Required!");
+  } else if (values.email.includes(" ")) {
+    error.email = toast.error("Wrong Email");
+    // eslint-disable-next-line
+  } else if (!/[`!@#$%^&*()_+-=\[\]{}; ':"\\|,.<>\/?~]/i.test(values.email)) {
+    error.email = toast.error("Invalid Email Address");
+  }
+
   return error;
 }
